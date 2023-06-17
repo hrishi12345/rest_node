@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Restaurant Orders</title>
+  <style>
+    .order-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .order-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .order-item button {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Restaurant Orders</h1>
+
+  <form id="order-form" action="/add-order" method="POST">
+    <div>
+      <label for="dish-name">Dish Name:</label>
+      <input type="text" id="dish-name" name="dish" required>
+    </div>
+    <div>
+      <label for="dish-price">Dish Price:</label>
+      <input type="number" id="dish-price" name="amount" required>
+    </div>
+    <div>
+      <label for="table-number">Table Number:</label>
+      <input type="number" id="table-number" name="Table" required>
+    </div>
+    <div>
+      <button type="submit">Add Order</button>
+    </div>
+  </form>
+
+  <h2>Order List</h2>
+<div class="table1">
+  <h2>Table 1</h2>
+  <ul id="order-list-1" class="order-list">
+    <% products.forEach(function(product) { %>
+      <% if (product.Table === 'table1') { %>
+        <li class="order-item">
+          <span><%= product.dish %> - <%= product.amount %> - Table <%= product.Table %></span>
+          <div>
+            <button class="edit-button">Edit</button>
+            <button class="delete-button">Delete</button>
+          </div>
+        </li>
+      <% } %>
+    <% }) %>
+  </ul>
+</div>
+<div class="table2">
+  <h2>Table 2</h2>
+  <ul id="order-list-2" class="order-list">
+    <% products.forEach(function(product) { %>
+      <% if (product.Table === 'table2') { %>
+        <li class="order-item">
+          <span><%= product.dish %> - <%= product.amount %> - Table <%= product.Table %></span>
+          <div>
+            <button class="edit-button">Edit</button>
+            <button class="delete-button">Delete</button>
+          </div>
+        </li>
+      <% } %>
+    <% }) %>
+  </ul>
+</div>
+<div class="table3">
+  <h2>Table 3</h2>
+  <ul id="order-list-3" class="order-list">
+    <% products.forEach(function(product) { %>
+      <% if (product.Table === 'table3') { %>
+        <li class="order-item">
+          <span><%= product.dish %> - <%= product.amount %> - Table <%= product.Table %></span>
+          <div>
+            <button class="edit-button">Edit</button>
+            <button class="delete-button">Delete</button>
+          </div>
+        </li>
+      <% } %>
+    <% }) %>
+  </ul>
+</div>
+
+  <script>
+    const orderForm = document.getElementById('order-form');
+    const orderList1 = document.getElementById('order-list-1');
+    const orderList2 = document.getElementById('order-list-2');
+    const orderList3 = document.getElementById('order-list-3');
+
+    orderForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      // Get form input values
+      const dishName = document.getElementById('dish-name').value;
+      const dishPrice = document.getElementById('dish-price').value;
+      const tableNumber = document.getElementById('table-number').value;
+
+      // Create list item HTML
+      const listItem = document.createElement('li');
+      listItem.className = 'order-item';
+      listItem.innerHTML = `
+        <span>${dishName} - ${dishPrice} - Table ${tableNumber}</span>
+        <div>
+          <button class="edit-button">Edit</button>
+          <button class="delete-button">Delete</button>
+        </div>
+      `;
+
+      // Determine the target order list based on the table number
+      let targetOrderList;
+      if (tableNumber === '1') {
+        targetOrderList = orderList1;
+      } else if (tableNumber === '2') {
+        targetOrderList = orderList2;
+      } else if (tableNumber === '3') {
+        targetOrderList = orderList3;
+      }
+
+      // Append the list item to the target order list
+      targetOrderList.appendChild(listItem);
+
+      // Reset form fields
+      orderForm.reset();
+    });
+
+    // Event delegation for dynamically added delete buttons
+    document.addEventListener('click', function(event) {
+      const target = event.target;
+
+      if (target.classList.contains('delete-button')) {
+        const listItem = target.closest('.order-item');
+        listItem.remove();
+      }
+    });
+  </script>
+</body>
+</html>
